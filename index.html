@@ -11,5 +11,23 @@
         <meta name="viewport" content="width=device-width">
     </head>
     <body>
+        <h1>Keys Plugin Demo</h1>
+        <p>
+        <div id="log">
+        </div>
+        <script src="components/jquery/jquery.min.js"></script>
+        <script src="jquery.keys.js"></script>
+        <script>
+            (function ($) {
+                $(function () {
+                    var $log = $('#log');
+                    $(document.body).midiKeys({
+                        channel : 4
+                    }).on('midiEvent', function (event, midiEvent) {
+                        $('<p></p>').text(midiEvent).appendTo($log);
+                    });
+                });
+            }(jQuery));
+        </script>
     </body>
 </html>
