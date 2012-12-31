@@ -43,7 +43,7 @@
                 }
                 var velocity = this.options[velocityKey];
                 if ($.isFunction(velocity)) {
-                    velocity = velocity();
+                    velocity = velocity(event.timeStamp);
                 }
                 var data = createMIDIEventData(status | this.options.channel, eventCode, velocity);
                 var midiEvent = new MIDIEvent(event.timeStamp, data);
