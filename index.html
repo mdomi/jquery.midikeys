@@ -22,7 +22,12 @@
                 $(function () {
                     var $log = $('#log');
                     $(document.body).midiKeys({
-                        channel : 4
+                        channel : 4,
+                        noteOffVelocity : 0x7f,
+                        noteOnVelocity : function (timestamp) {
+                            console.log(timestamp);
+                            return timestamp % 0x7f;
+                        }
                     }).on('midiEvent', function (event, midiEvent) {
                         $('<p></p>').text(midiEvent).appendTo($log);
                     });
