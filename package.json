@@ -1,0 +1,7 @@
+{
+    "name" : "keys",
+    "version" : "0.0.1",
+    "author" : "Mike Dominice <mike@mikedominice.com>",
+    "description" : "jQuery plugin to map keyboard to MIDI note events",
+    "devDependencies" : {}
+}
