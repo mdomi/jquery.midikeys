@@ -20,6 +20,7 @@
         pluginName = 'midiKeys',
         pluginDataName = 'plugin_' + pluginName,
         keys = 'ZSXDCVGBHNJM' + 'Q2W3ER5T6Y7U' + 'I9O0P',
+        events = {},
         createMIDIEventData = function (status, note, velocity) {
             var data = new Uint8Array(3);
             data[0] = status;
@@ -37,17 +38,33 @@
         },
         createEventCallback = function (status, velocityKey) {
             return function (event) {
-                var eventCode = getEventCode.call(this, event);
+                var eventCode = getEventCode.call(this, event),
+                    velocity = this.options[velocityKey],
+                    eventKey = pluginName + eventCode;
+                
                 if (!eventCode) {
                     return;
                 }
-                var velocity = this.options[velocityKey];
+                
+                switch (event.type) {
+                    case 'keydown':
+                    if (events[eventKey]) {
+                        return; // already fired, don't do it again
+                    } else {
+                        events[eventKey] = true;
+                    }
+                    break;
+                    case 'keyup':
+                    delete events[eventKey];
+                    break;
+                }
+
                 if ($.isFunction(velocity)) {
                     velocity = velocity(event.timeStamp);
                 }
+                
                 var data = createMIDIEventData(status | this.options.channel, eventCode, velocity);
-                var midiEvent = new MIDIEvent(event.timeStamp, data);
-                this.$element.trigger('midiEvent', midiEvent);
+                this.$element.trigger('midiEvent', new MIDIEvent(event.timeStamp, data));
             };
         };
 
