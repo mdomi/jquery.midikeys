@@ -4,5 +4,9 @@
     "author" : "Mike Dominice <mike@mikedominice.com>",
     "description" : "jQuery plugin to map keyboard to MIDI note events",
     "license" : "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/mdomi/jquery.midikeys.git"
+    },
     "devDependencies" : {}
 }
