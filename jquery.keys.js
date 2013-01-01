@@ -1,3 +1,8 @@
+/**
+ * jquery.midikeys.js
+ * (c) 2012 Michael Dominice
+ * jquery.midikeys.js is freely distributable under the MIT license.
+ */
 (function (root, factory) {
     if (typeof define !== 'undefined' && define.amd) {
         define(['jquery'], function ($) {
