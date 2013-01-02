@@ -27,7 +27,7 @@
                         noteOnVelocity : function (timestamp) {
                             return timestamp % 0x7f;
                         }
-                    }).on('midiEvent', function (event, midiEvent) {
+                    }).on('message', function (event, midiEvent) {
                         $('<p></p>').text(midiEvent).appendTo($log);
                     });
                 });

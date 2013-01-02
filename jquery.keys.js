@@ -69,7 +69,7 @@
                 }
                 
                 var data = createMIDIEventData(status | this.options.channel, eventCode, velocity);
-                this.$element.trigger('midiEvent', new MIDIEvent(event.timeStamp, data));
+                this.$element.trigger('message', new MIDIEvent(event.timeStamp, data));
             };
         };
 
