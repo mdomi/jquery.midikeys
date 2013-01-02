@@ -22,6 +22,7 @@
             noteOffVelocity : 0x40, // 64,
             channel : 0
         },
+        PARAMETERS = [],
         pluginName = 'midiKeys',
         pluginDataName = 'plugin_' + pluginName,
         keys = 'ZSXDCVGBHNJM' + 'Q2W3ER5T6Y7U' + 'I9O0P',
@@ -72,6 +73,10 @@
                 this.$element.trigger('message', new MIDIEvent(event.timeStamp, data));
             };
         };
+
+    PARAMETERS = $.map(defaults, function (value, key) {
+        return key;
+    });
 
     function MIDIEvent(timestamp, data) {
         this.timestamp = timestamp;
@@ -136,6 +141,11 @@
                 this.$element.off('keyup', keyup);
                 this.$element.removeData(pluginDataName);
             };
+        },
+        option : function (name, value) {
+            if (PARAMETERS.indexOf(name) > -1) {
+                this.options[name] = value;
+            }
         }
     };
 
