@@ -1,15 +1,16 @@
 {
-    "name" : "keys",
-    "version" : "0.0.1",
-    "author" : "Mike Dominice <mike@mikedominice.com>",
-    "description" : "jQuery plugin to map keyboard to MIDI note events",
-    "license" : "MIT",
+    "name": "keys",
+    "version": "0.0.1",
+    "author": "Mike Dominice <mike@mikedominice.com>",
+    "description": "jQuery plugin to map keyboard to MIDI note events",
+    "license": "MIT",
     "repository": {
         "type": "git",
         "url": "https://github.com/mdomi/jquery.midikeys.git"
     },
-    "devDependencies" : {
-        "grunt" : "~0.4.1",
-        "grunt-contrib-jshint": "~0.1.1"
+    "devDependencies": {
+        "grunt": "~0.4.1",
+        "grunt-contrib-jshint": "~0.1.1",
+        "grunt-contrib-uglify": "~0.2.0"
     }
 }
