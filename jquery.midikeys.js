@@ -5,11 +5,16 @@
  */
 (function (root, define, factory) {
     'use strict';
-    if (typeof define !== 'undefined' && define.amd) {
-        define(['jquery'], function ($) {
-            return factory($);
-        });
+    if (typeof exports === 'object') {
+        // Node. Does not work with strict CommonJS, but
+        // onlyu Common-JS-like environments that support module.exports,
+        // like Node.
+        module.exports = factory(require('jquery'));
+    } else if (typeof define !== 'undefined' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(['jquery'], factory);
     } else {
+        // Browser globals (root is window)
         return factory(root.jQuery);
     }
 }(this, this.define, function ($, undefined) {
@@ -31,9 +36,7 @@
             noteOffVelocity : NOTE_VELOCITY_64,
             channel : 0
         },
-        PARAMETERS = $.map(defaults, function (value, key) {
-            return key;
-        }),
+        PARAMETERS = ['startNote', 'noteOnVelocity', 'noteOffVelocity', 'channel'],
         pluginName = 'midiKeys',
         pluginDataName = '_plugin_' + pluginName,
         keys = 'ZSXDCVGBHNJM' + 'Q2W3ER5T6Y7U' + 'I9O0P',

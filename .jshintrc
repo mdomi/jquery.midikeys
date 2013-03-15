@@ -23,6 +23,9 @@
     "bitwise" : false,
     "globals" : {
         "define" : false,
+        "require" : false,
+        "test" : false,
+        "ok" : false,
         "Uint8Array" : false,
         "module" : false
     }

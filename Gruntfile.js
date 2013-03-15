@@ -17,13 +17,16 @@ module.exports = function (grunt) {
     // Project configuration.
     grunt.initConfig({
         pkg : grunt.file.readJSON('package.json'),
+        qunit : {
+            all : ['test/**/*.html']
+        },
         uglify : {
             options : {
                 banner : banner
             },
             build : {
                 src : 'jquery.midikeys.js',
-                dest : 'jquery.midikeys.min.js'
+                dest : ['jquery.midikeys.min.js']
             }
         },
         jshint : {
@@ -36,8 +39,13 @@ module.exports = function (grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-qunit');
+
+    // Test task
+    grunt.registerTask('test', ['jshint', 'qunit']);
 
     // Default tasks(s)
-    grunt.registerTask('default', ['jshint', 'uglify']);
+    grunt.registerTask('default', ['test', 'uglify']);
+
 
 };
