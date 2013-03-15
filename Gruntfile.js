@@ -3,7 +3,6 @@
  * (c) 2013 Michael Dominice
  * Gruntfile.js is freely distributable under the MIT license.
  */
-/* global module:false */
 module.exports = function (grunt) {
     'use strict';
 
@@ -26,12 +25,19 @@ module.exports = function (grunt) {
                 src : 'jquery.keys.js',
                 dest : 'jquery.keys.min.js'
             }
+        },
+        jshint : {
+            options : {
+                jshintrc : '.jshintrc'
+            },
+            all : ['Gruntfile.js', 'jquery.keys.js']
         }
     });
 
-    // Load the plugin that provides the "uglify" task.
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
 
     // Default tasks(s)
-    grunt.registerTask('default', ['uglify']);
+    grunt.registerTask('default', ['jshint', 'uglify']);
+
 };

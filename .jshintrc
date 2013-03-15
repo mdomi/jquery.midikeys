@@ -19,5 +19,11 @@
     "strict" : true,
     "trailing" : true,
     "maxparams" : 4,
-    "maxlen" : 100
+    "maxlen" : 100,
+    "bitwise" : false,
+    "globals" : {
+        "define" : false,
+        "Uint8Array" : false,
+        "module" : false
+    }
 }
