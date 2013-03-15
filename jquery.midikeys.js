@@ -3,7 +3,7 @@
  * (c) 2013 Michael Dominice
  * jquery.midikeys.js is freely distributable under the MIT license.
  */
-(function (root, factory) {
+(function (root, define, factory) {
     'use strict';
     if (typeof define !== 'undefined' && define.amd) {
         define(['jquery'], function ($) {
@@ -12,24 +12,32 @@
     } else {
         return factory(root.jQuery);
     }
-}(this, function ($) {
+}(this, this.define, function ($, undefined) {
     'use strict';
 
-    var NOTE_ON = 0x90,
+    var NOTE_VALUE_C3 = 48,
+        NOTE_VELOCITY_128 = 0x7f,
+        NOTE_VELOCITY_64 = 0x40,
+        NOTE_ON = 0x90,
         NOTE_OFF = 0x80,
         NOTES_PER_OCTAVE = 12,
+        EVENT_KEYDOWN = 'keydown',
+        EVENT_KEYUP = 'keyup',
+        DESTROY_METHOD_NAME = 'destroy',
         notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'],
         defaults = {
-            startNote : 48, // C3
-            noteOnVelocity : 0x7f, // 128
-            noteOffVelocity : 0x40, // 64,
+            startNote : NOTE_VALUE_C3,
+            noteOnVelocity : NOTE_VELOCITY_128,
+            noteOffVelocity : NOTE_VELOCITY_64,
             channel : 0
         },
-        PARAMETERS = [],
+        PARAMETERS = $.map(defaults, function (value, key) {
+            return key;
+        }),
         pluginName = 'midiKeys',
         pluginDataName = '_plugin_' + pluginName,
         keys = 'ZSXDCVGBHNJM' + 'Q2W3ER5T6Y7U' + 'I9O0P',
-        events = {},
+        types = {},
         createMIDIEventData = function (status, note, velocity) {
             var data = new Uint8Array(3);
             data[0] = status;
@@ -44,118 +52,117 @@
                 return;
             }
             return startNote + index;
-        },
-        createEventCallback = function (status, velocityKey) {
-            return function (event) {
-                var eventCode = getEventCode(event, this.options.startNote),
-                    velocity = this.options[velocityKey],
-                    eventKey = pluginName + eventCode;
-
-                if (!eventCode) {
-                    return;
-                }
-
-                switch (event.type) {
-                case 'keydown':
-                    if (events[eventKey]) {
-                        return; // already fired, don't do it again
-                    } else {
-                        events[eventKey] = true;
-                    }
-                    break;
-                case 'keyup':
-                    delete events[eventKey];
-                    break;
-                }
-
-                if ($.isFunction(velocity)) {
-                    velocity = velocity(event.timeStamp);
-                }
-
-                var data = createMIDIEventData(status | this.options.channel, eventCode, velocity);
-                this.$element.trigger('message', new MIDIEvent(event.timeStamp, data));
-            };
         };
 
-    PARAMETERS = $.map(defaults, function (value, key) {
-        return key;
-    });
+    types[NOTE_ON] = 'NOTE ON';
+    types[NOTE_OFF] = 'NOTE_OFF';
 
     function MIDIEvent(timestamp, data) {
-        this.timestamp = timestamp;
-        this.data = data;
-    }
 
-    MIDIEvent.prototype = {
-        getChannel : function () {
-            return this.data[0] & 0x0f;
-        },
-        getVelocity : function () {
-            return this.data[2];
-        },
-        getOctave : function () {
-            return Math.floor(this.data[1] / NOTES_PER_OCTAVE) - 1;
-        },
-        getNoteLetter : function () {
-            return notes[this.data[1] % NOTES_PER_OCTAVE];
-        },
-        getNote : function () {
+        var event = $.extend(this, {
+            timestamp : timestamp,
+            data : data
+        });
+
+        event.getChannel = function () {
+            return data[0] & 0x0f;
+        };
+
+        event.getVelocity = function () {
+            return data[2];
+        };
+
+        event.getOctave = function () {
+            return Math.floor(data[1] / NOTES_PER_OCTAVE) - 1;
+        };
+
+        event.getNoteLetter = function () {
+            return notes[data[1] % NOTES_PER_OCTAVE];
+        };
+
+        event.getNote = function () {
             return this.getNoteLetter() + this.getOctave();
-        },
-        toString : function () {
+        };
+
+        event.toString = function () {
             var parts = [
-                'type=' + this.getType(),
-                'channel=' + this.getChannel(),
-                'note=' + this.getNote(),
-                'velocity=' + this.getVelocity()
+                'type=' + event.getType(),
+                'channel=' + event.getChannel(),
+                'note=' + event.getNote(),
+                'velocity=' + event.getVelocity()
             ];
             return 'MIDIEvent[' + parts.join(',') + ']';
-        },
-        getType : function () {
-            var statusWithoutChannel = this.data[0] & 0xf0;
-            if (statusWithoutChannel === NOTE_ON) {
-                return 'NOTE ON';
-            }
-            if (statusWithoutChannel === NOTE_OFF) {
-                return 'NOTE OFF';
-            }
-        }
-    };
+        };
 
-    function MIDIKeys(element, options) {
-        this.element = element;
-        this.$element = $(element);
-
-        this.options = $.extend({}, defaults, options);
-
-        this._defaults = defaults;
-
-        this.init();
+        event.getType = function () {
+            return types[data[0] & 0xf0];
+        };
     }
 
-    MIDIKeys.prototype = {
-        init : function () {
-            var keydown = $.proxy(createEventCallback(NOTE_ON, 'noteOnVelocity'), this),
-                keyup = $.proxy(createEventCallback(NOTE_OFF, 'noteOffVelocity'), this);
-            this.$element.on('keydown', keydown);
-            this.$element.on('keyup', keyup);
-            this.destroy = function () {
-                this.$element.off('keydown', keydown);
-                this.$element.off('keyup', keyup);
-            };
-        },
-        option : function (name, value) {
+    function MIDIKeys(element, options) {
+
+        var plugin = this,
+            events = {},
+            $el = plugin.$el = $(element),
+            opts = plugin.opts = $.extend({}, defaults, options),
+            createEventCallback = function (status, velocity) {
+                return function (event) {
+                    var eventCode = getEventCode(event, opts.startNote),
+                        eventKey = pluginName + eventCode;
+
+                    if (!eventCode) {
+                        return;
+                    }
+
+                    switch (event.type) {
+                    case 'keydown':
+                        if (events[eventKey]) {
+                            return; // already fired, don't do it again
+                        } else {
+                            events[eventKey] = true;
+                        }
+                        break;
+                    case 'keyup':
+                        delete events[eventKey];
+                        break;
+                    }
+
+                    velocity = $.isFunction(velocity) ? velocity(event.timeStamp) : velocity;
+
+                    var data = createMIDIEventData(status | opts.channel, eventCode, velocity);
+                    $el.trigger('message', new MIDIEvent(event.timeStamp, data));
+                };
+            },
+            // save references of callback to support detachment if necessary
+            keydown = createEventCallback(NOTE_ON, opts.noteOnVelocity),
+            keyup = createEventCallback(NOTE_OFF, opts.noteOffVelocity);
+
+
+        plugin._defaults = defaults;
+
+        plugin.option = function (name, value) {
             if (PARAMETERS.indexOf(name) > -1) {
-                this.options[name] = value;
+                opts[name] = value;
             }
-        }
-    };
+        };
+
+        // bind events
+        $el.on(EVENT_KEYDOWN, keydown);
+        $el.on(EVENT_KEYUP, keyup);
+
+        plugin[DESTROY_METHOD_NAME] = function () {
+            // unbind events
+            $el.off(EVENT_KEYDOWN, keydown);
+            $el.off(EVENT_KEYUP, keyup);
+        };
+
+    }
 
     $.fn[pluginName] = function (options) {
 
         var args = arguments;
 
-        if (options === void 0 || typeof options === 'object') {
+        if (options === undefined || typeof options === 'object') {
 
             return this.each(function () {
 
@@ -177,12 +184,12 @@
                     returns = plugin[options].apply(plugin, args);
                 }
 
-                if (options === 'destroy') {
+                if (options === DESTROY_METHOD_NAME) {
                     $.data(this, pluginDataName, null);
                 }
             });
 
-            return returns !== void 0 ? returns : this;
+            return returns !== undefined ? returns : this;
         }
 
     };
