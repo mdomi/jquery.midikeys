@@ -3,7 +3,10 @@
  * (c) 2012 Michael Dominice
  * jquery.midikeys.js is freely distributable under the MIT license.
  */
+/* jshint bitwise:false */
+/* global Uint8Array:false, define:false */
 (function (root, factory) {
+    'use strict';
     if (typeof define !== 'undefined' && define.amd) {
         define(['jquery'], function ($) {
             return factory($);
@@ -12,6 +15,7 @@
         return factory(root.jQuery);
     }
 }(this, function ($) {
+    'use strict';
 
     var NOTE_ON = 0x90,
         NOTE_OFF = 0x80,
@@ -34,17 +38,17 @@
             data[2] = velocity;
             return data;
         },
-        getEventCode = function (event) {
+        getEventCode = function (event, startNote) {
             var character = String.fromCharCode(event.keyCode),
                 index = keys.indexOf(character);
             if (index < 0) {
                 return;
             }
-            return this.options.startNote + index;
+            return startNote + index;
         },
         createEventCallback = function (status, velocityKey) {
             return function (event) {
-                var eventCode = getEventCode.call(this, event),
+                var eventCode = getEventCode(event, this.options.startNote),
                     velocity = this.options[velocityKey],
                     eventKey = pluginName + eventCode;
 
@@ -53,14 +57,14 @@
                 }
 
                 switch (event.type) {
-                    case 'keydown':
+                case 'keydown':
                     if (events[eventKey]) {
                         return; // already fired, don't do it again
                     } else {
                         events[eventKey] = true;
                     }
                     break;
-                    case 'keyup':
+                case 'keyup':
                     delete events[eventKey];
                     break;
                 }
@@ -136,15 +140,15 @@
                 keyup = $.proxy(createEventCallback(NOTE_OFF, 'noteOffVelocity'), this);
             this.$element.on('keydown', keydown);
             this.$element.on('keyup', keyup);
+            this.destroy = function () {
+                this.$element.off('keydown', keydown);
+                this.$element.off('keyup', keyup);
+            };
         },
         option : function (name, value) {
             if (PARAMETERS.indexOf(name) > -1) {
                 this.options[name] = value;
             }
-        },
-        destroy : function () {
-            this.$element.off('keydown', keydown);
-            this.$element.off('keyup', keyup);
         }
     };
 
@@ -171,7 +175,7 @@
                 var plugin = $(this).data(pluginDataName);
 
                 if (plugin instanceof MIDIKeys && typeof plugin[options] === 'function') {
-                    returns = plugin[options].apply(plutin, args);
+                    returns = plugin[options].apply(plugin, args);
                 }
 
                 if (options === 'destroy') {
