@@ -19,6 +19,7 @@
 
     var NOTE_ON = 0x90,
         NOTE_OFF = 0x80,
+        NOTES_PER_OCTAVE = 12,
         notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'],
         defaults = {
             startNote : 48, // C3
@@ -95,10 +96,10 @@
             return this.data[2];
         },
         getOctave : function () {
-            return Math.floor(this.data[1] / 12) - 1;
+            return Math.floor(this.data[1] / NOTES_PER_OCTAVE) - 1;
         },
         getNoteLetter : function () {
-            return notes[this.data[1] % 12];
+            return notes[this.data[1] % NOTES_PER_OCTAVE];
         },
         getNote : function () {
             return this.getNoteLetter() + this.getOctave();
