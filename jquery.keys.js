@@ -24,7 +24,7 @@
         },
         PARAMETERS = [],
         pluginName = 'midiKeys',
-        pluginDataName = 'plugin_' + pluginName,
+        pluginDataName = '_plugin_' + pluginName,
         keys = 'ZSXDCVGBHNJM' + 'Q2W3ER5T6Y7U' + 'I9O0P',
         events = {},
         createMIDIEventData = function (status, note, velocity) {
@@ -47,11 +47,11 @@
                 var eventCode = getEventCode.call(this, event),
                     velocity = this.options[velocityKey],
                     eventKey = pluginName + eventCode;
-                
+
                 if (!eventCode) {
                     return;
                 }
-                
+
                 switch (event.type) {
                     case 'keydown':
                     if (events[eventKey]) {
@@ -68,7 +68,7 @@
                 if ($.isFunction(velocity)) {
                     velocity = velocity(event.timeStamp);
                 }
-                
+
                 var data = createMIDIEventData(status | this.options.channel, eventCode, velocity);
                 this.$element.trigger('message', new MIDIEvent(event.timeStamp, data));
             };
@@ -136,29 +136,54 @@
                 keyup = $.proxy(createEventCallback(NOTE_OFF, 'noteOffVelocity'), this);
             this.$element.on('keydown', keydown);
             this.$element.on('keyup', keyup);
-            this.destroy = function () {
-                this.$element.off('keydown', keydown);
-                this.$element.off('keyup', keyup);
-                this.$element.removeData(pluginDataName);
-            };
         },
         option : function (name, value) {
             if (PARAMETERS.indexOf(name) > -1) {
                 this.options[name] = value;
             }
+        },
+        destroy : function () {
+            this.$element.off('keydown', keydown);
+            this.$element.off('keyup', keyup);
         }
     };
 
-    return $.fn[pluginName] = function (options) {
-        var args = Array.prototype.slice.call(arguments, 1);
-        return this.each(function () {
-            var pluginData = $.data(this, pluginDataName);
-            if (pluginData && $.isFunction(pluginData[options])) {
-                pluginData[options].apply(pluginData, args);
-            } else if (!pluginData) {
-                $.data(this, pluginDataName, new MIDIKeys(this, options));
-            }
-        });
+    $.fn[pluginName] = function (options) {
+
+        var args = arguments;
+
+        if (options === void 0 || typeof options === 'object') {
+
+            return this.each(function () {
+
+                if (!$.data(this, pluginDataName)) {
+                    $.data(this, pluginDataName, new MIDIKeys(this, options));
+                }
+
+            });
+
+        } else if (typeof options === 'string') {
+
+            var returns;
+            args = Array.prototype.slice.call(args, 1);
+
+            this.each(function () {
+                var plugin = $(this).data(pluginDataName);
+
+                if (plugin instanceof MIDIKeys && typeof plugin[options] === 'function') {
+                    returns = plugin[options].apply(plutin, args);
+                }
+
+                if (options === 'destroy') {
+                    $.data(this, pluginDataName, null);
+                }
+            });
+
+            return returns !== void 0 ? returns : this;
+        }
+
     };
+
+    return $.fn[pluginName];
 
 }));
