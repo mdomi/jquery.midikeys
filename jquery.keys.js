@@ -1,6 +1,6 @@
 /**
  * jquery.midikeys.js
- * (c) 2012 Michael Dominice
+ * (c) 2013 Michael Dominice
  * jquery.midikeys.js is freely distributable under the MIT license.
  */
 /* jshint bitwise:false */
