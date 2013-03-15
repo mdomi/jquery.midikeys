@@ -124,7 +124,7 @@
         }
     };
 
-    function MIDIKeys (element, options) {
+    function MIDIKeys(element, options) {
         this.element = element;
         this.$element = $(element);
 
