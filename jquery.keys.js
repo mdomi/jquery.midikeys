@@ -3,8 +3,6 @@
  * (c) 2013 Michael Dominice
  * jquery.midikeys.js is freely distributable under the MIT license.
  */
-/* jshint bitwise:false */
-/* global Uint8Array:false, define:false */
 (function (root, factory) {
     'use strict';
     if (typeof define !== 'undefined' && define.amd) {
