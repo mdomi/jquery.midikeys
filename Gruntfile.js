@@ -22,15 +22,15 @@ module.exports = function (grunt) {
                 banner : banner
             },
             build : {
-                src : 'jquery.midiKeys.js',
-                dest : 'jquery.midiKeys.min.js'
+                src : 'jquery.midikeys.js',
+                dest : 'jquery.midikeys.min.js'
             }
         },
         jshint : {
             options : {
                 jshintrc : '.jshintrc'
             },
-            all : ['Gruntfile.js', 'jquery.midiKeys.js']
+            all : ['Gruntfile.js', 'jquery.midikeys.js']
         }
     });
 
