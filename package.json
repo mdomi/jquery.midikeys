@@ -1,6 +1,6 @@
 {
     "name": "jquery.midikeys",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "author": "Mike Dominice <mike@mikedominice.com>",
     "description": "jQuery plugin to map keyboard to MIDI note events",
     "license": "MIT",
