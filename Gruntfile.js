@@ -8,7 +8,7 @@ module.exports = function (grunt) {
 
     var banner = [
         '/**',
-        ' * <%= pkg.name %>',
+        ' * <%= pkg.name %> <%= pkg.version %>',
         ' * (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>',
         ' * <%= pkg.name %> is freely distributable under the MIT license.',
         ' */\n'
