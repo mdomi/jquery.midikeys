@@ -26,7 +26,7 @@ module.exports = function (grunt) {
             },
             build : {
                 files : {
-                    'jquery.midikeys.min.js' : ['jquery.midikeys.js']
+                    'lib/jquery.midikeys.min.js' : ['lib/jquery.midikeys.js']
                 }
             }
         },
@@ -34,7 +34,7 @@ module.exports = function (grunt) {
             options : {
                 jshintrc : '.jshintrc'
             },
-            all : ['Gruntfile.js', 'jquery.midikeys.js']
+            all : ['Gruntfile.js', 'lib/jquery.midikeys.js']
         }
     });
 
