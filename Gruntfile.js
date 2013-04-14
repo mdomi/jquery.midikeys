@@ -21,7 +21,7 @@ module.exports = function (grunt) {
         qunit : {
             all : {
                 options : {
-                    urls : ['1.9.1'].map(function (version) {
+                    urls : ['1.9.1', '1.8.3', '1.7.2'].map(function (version) {
                         return testUrl + version;
                     })
                 }
@@ -41,7 +41,12 @@ module.exports = function (grunt) {
             options : {
                 jshintrc : '.jshintrc'
             },
-            all : ['Gruntfile.js', 'lib/jquery.midikeys.js', 'test/test.js']
+            all : [
+                'Gruntfile.js',
+                'lib/jquery.midikeys.js',
+                'test/test.js',
+                'test/jquery-loader.js'
+            ]
         },
         bower : {
             install : {
