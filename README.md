@@ -42,3 +42,7 @@ The message passed to event handlers implements the IDL for the [Web MIDI API MI
   * Integer
   * The MIDI channel on which events will be triggered.
   * Defaults to 0
+
+# Compatability
+
+Tested against jQuery 1.9.1, 1.8.3, 1.7.2.
