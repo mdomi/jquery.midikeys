@@ -21,7 +21,6 @@
         var $el = $('#test-target').midiKeys();
 
         $el.on('message', function (event, message) {
-            console.log(event);
             equal(message.data[0], 0x90, 'Should be a MIDI NOTE ON event');
             equal(message.data[1], 48, 'Should be a C3 note');
             equal(message.data[2], 127, 'Should have default velocity');
@@ -33,4 +32,4 @@
         $el.trigger(event);
     });
 
-}(jQuery));
+}(this.jQuery));
