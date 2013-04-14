@@ -6,13 +6,14 @@
 module.exports = function (grunt) {
     'use strict';
 
-    var banner = [
-        '/**',
-        ' * <%= pkg.name %> <%= pkg.version %>',
-        ' * (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>',
-        ' * <%= pkg.name %> is freely distributable under the MIT license.',
-        ' */\n'
-    ].join('\n');
+    var testUrl = 'http://localhost:<%= connect.server.options.port %>/test/test.html?jquery=',
+        banner = [
+            '/**',
+            ' * <%= pkg.name %> <%= pkg.version %>',
+            ' * (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>',
+            ' * <%= pkg.name %> is freely distributable under the MIT license.',
+            ' */\n'
+        ].join('\n');
 
     // Project configuration.
     grunt.initConfig({
@@ -20,7 +21,9 @@ module.exports = function (grunt) {
         qunit : {
             all : {
                 options : {
-                    urls : ['http://localhost:<%= connect.server.options.port %>/test/test.html']
+                    urls : ['1.9.1'].map(function (version) {
+                        return testUrl + version;
+                    })
                 }
             }
         },
