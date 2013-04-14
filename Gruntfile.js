@@ -34,16 +34,25 @@ module.exports = function (grunt) {
             options : {
                 jshintrc : '.jshintrc'
             },
-            all : ['Gruntfile.js', 'lib/jquery.midikeys.js']
+            all : ['Gruntfile.js', 'lib/jquery.midikeys.js', 'test/test.js']
+        },
+        bower : {
+            install : {
+                options : {
+                    targetDir : './components',
+                    cleanup : true
+                }
+            }
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-qunit');
+    grunt.loadNpmTasks('grunt-bower-task');
 
     // Test task
-    grunt.registerTask('test', ['jshint', 'uglify', 'qunit']);
+    grunt.registerTask('test', ['bower:install', 'jshint', 'uglify', 'qunit']);
 
     // Default tasks(s)
     grunt.registerTask('default', ['test']);

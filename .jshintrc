@@ -1,5 +1,5 @@
 {
-    "bitwise" : true,
+    "bitwise" : false,
     "camelcase" : true,
     "curly" : true,
     "eqeqeq" : true,
@@ -11,7 +11,7 @@
     "noarg" : true,
     "noempty" : true,
     "nonew" : true,
-    "plusplus" : false,
+    "plusplus" : true,
     "quotmark" : "single",
     "regexp" : true,
     "undef" : true,
@@ -20,13 +20,17 @@
     "trailing" : true,
     "maxparams" : 4,
     "maxlen" : 100,
-    "bitwise" : false,
     "globals" : {
         "define" : false,
         "require" : false,
         "test" : false,
         "ok" : false,
         "Uint8Array" : false,
-        "module" : false
+        "module" : false,
+        "test" : false,
+        "equal" : false,
+        "asyncTest" : false,
+        "expect" : false,
+        "start" : false
     }
 }
