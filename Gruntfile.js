@@ -18,7 +18,11 @@ module.exports = function (grunt) {
     grunt.initConfig({
         pkg : grunt.file.readJSON('package.json'),
         qunit : {
-            all : ['test/**/*.html']
+            all : {
+                options : {
+                    urls : ['http://localhost:<%= connect.server.options.port %>/test/test.html']
+                }
+            }
         },
         uglify : {
             options : {
@@ -43,6 +47,13 @@ module.exports = function (grunt) {
                     cleanup : true
                 }
             }
+        },
+        connect : {
+            server : {
+                options : {
+                    port : 8085
+                }
+            }
         }
     });
 
@@ -50,9 +61,12 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-bower-task');
+    grunt.loadNpmTasks('grunt-contrib-connect');
+
+    grunt.registerTask('prepare-code', ['jshint', 'uglify']);
 
     // Test task
-    grunt.registerTask('test', ['bower:install', 'jshint', 'uglify', 'qunit']);
+    grunt.registerTask('test', ['bower:install', 'prepare-code', 'connect', 'qunit']);
 
     // Default tasks(s)
     grunt.registerTask('default', ['test']);
