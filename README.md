@@ -4,6 +4,11 @@ A jQuery plugin which captures the keyboard events and translates them into appr
 
 With the large explosion of browser functionality in the realm of [audio](https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html "Web Audio API") and [MIDI](http://www.w3.org/TR/webmidi/ "Web MIDI API"), I found myself in need of a the ability to have a source of MIDI events in situations where it was not convenient to actually utilize a MIDI device. In many applications, the computer keyboard is mapped to a set of notes that can be used to play a software synthesizer utilizing the computer keyboard. This plugin enables these same mappings to be bound in a JavaScript application. 
 
+## Quick Info
+
+* 2.19kB minified, 6.12kB full
+* Tested against jQuery 1.9.1, 1.8.3, 1.7.2
+
 ## Usage
 
 Simple usage:
@@ -42,7 +47,3 @@ The message passed to event handlers implements the IDL for the [Web MIDI API MI
   * Integer
   * The MIDI channel on which events will be triggered.
   * Defaults to 0
-
-## Compatability
-
-Tested against jQuery 1.9.1, 1.8.3, 1.7.2.
