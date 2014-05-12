@@ -1,4 +1,4 @@
-(function ($) {
+(function (document, $) {
     'use strict';
 
     test('plugin is set up', function () {
@@ -27,9 +27,10 @@
             start();
         });
 
-        var event = $.Event('keydown');
+        var event = document.createEvent('HTMLEvents');
+        event.initEvent('keydown', true, false);
         event.keyCode = 'Z'.charCodeAt(0);
-        $el.trigger(event);
+        $el[0].dispatchEvent(event);
     });
 
-}(this.jQuery));
+}(this.document, this.jQuery));
