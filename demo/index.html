@@ -15,8 +15,8 @@
         <p>
         <div id="log">
         </div>
-        <script src="../components/jquery/jquery.min.js"></script>
-        <script src="../jquery.midikeys.min.js"></script>
+        <script src="../components/jquery/dist/jquery.min.js"></script>
+        <script src="../lib/jquery.midikeys.min.js"></script>
         <script>
             (function ($) {
                 $(function () {
@@ -28,7 +28,7 @@
                             return timestamp % 0x7f;
                         }
                     }).on('message', function (event, midiEvent) {
-                        $('<p></p>').text(midiEvent).appendTo($log);
+                        $('<p></p>').text(JSON.stringify(midiEvent)).appendTo($log);
                     });
                 });
             }(jQuery));
