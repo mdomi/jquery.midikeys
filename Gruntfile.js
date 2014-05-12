@@ -6,14 +6,21 @@
 module.exports = function (grunt) {
     'use strict';
 
-    var testUrl = 'http://localhost:<%= connect.server.options.port %>/test/test.html?jquery=',
+    var testBaseUrl =
+            'http://<%= connect.server.options.hostname %>:<%= connect.server.options.port %>',
+        testPath = '/test/test.html?jquery=',
         banner = [
             '/**',
             ' * <%= pkg.name %> <%= pkg.version %>',
             ' * (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>',
             ' * <%= pkg.name %> is freely distributable under the MIT license.',
             ' */\n'
-        ].join('\n');
+        ].join('\n'),
+        jQueryVersions = ['2.1.1', '2.0.3', '1.10.2', '1.9.1', '1.8.3', '1.7.2'];
+
+    function createTestUrlForJQueryVersion(version) {
+        return testBaseUrl + testPath + version;
+    }
 
     // Project configuration.
     grunt.initConfig({
@@ -21,9 +28,7 @@ module.exports = function (grunt) {
         qunit : {
             all : {
                 options : {
-                    urls : ['1.9.1', '1.8.3', '1.7.2'].map(function (version) {
-                        return testUrl + version;
-                    })
+                    urls : jQueryVersions.map(createTestUrlForJQueryVersion)
                 }
             }
         },
@@ -51,15 +56,16 @@ module.exports = function (grunt) {
         bower : {
             install : {
                 options : {
-                    targetDir : './components',
-                    cleanup : true
+                    targetDir : 'components',
+                    cleanTargetDir : true
                 }
             }
         },
         connect : {
             server : {
                 options : {
-                    port : 8085
+                    port : 8085,
+                    hostname : 'localhost'
                 }
             }
         }
