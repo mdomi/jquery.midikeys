@@ -47,9 +47,13 @@ module.exports = function (grunt) {
             options : {
                 jshintrc : '.jshintrc'
             },
-            all : [
-                'Gruntfile.js',
-                'lib/jquery.midikeys.js',
+            src : [
+                'lib/jquery.midikeys.js'
+            ],
+            grunt : [
+                'Gruntfile.js'
+            ],
+            test : [
                 'test/test.js',
                 'test/jquery-loader.js'
             ]
@@ -69,22 +73,30 @@ module.exports = function (grunt) {
                     hostname : 'localhost'
                 }
             }
+        },
+        watch : {
+            js : {
+                files : ['lib/jquery.midikeys.js'],
+                tasks : ['jshint:src', 'uglify', 'qunit']
+            },
+            test : {
+                files : ['test/**/*.js', 'test/**/*.html'],
+                tasks : ['jshint:test', 'qunit']
+            }
         }
     });
 
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-qunit');
-    grunt.loadNpmTasks('grunt-bower-task');
-    grunt.loadNpmTasks('grunt-contrib-connect');
+    require('load-grunt-tasks')(grunt);
 
     grunt.registerTask('prepare-code', ['jshint', 'uglify']);
 
     // Test task
     grunt.registerTask('test', ['bower:install', 'prepare-code', 'connect', 'qunit']);
 
+    // Dev task
+    grunt.registerTask('dev', ['bower:install', 'connect', 'watch']);
+
     // Default tasks(s)
     grunt.registerTask('default', ['test']);
-
 
 };
