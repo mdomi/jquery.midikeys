@@ -6,7 +6,7 @@ With the large explosion of browser functionality in the realm of [audio](https:
 
 ## Quick Info
 
-* 1.72kB minified, 5.79kB full
+* 1.92kB minified, 6.19kB full
 * Tested against jQuery 2.1.1, 2.0.3, 1.10.2, 1.9.1, 1.8.3, 1.7.2
 
 ## Usage
