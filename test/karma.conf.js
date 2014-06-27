@@ -15,6 +15,7 @@ module.exports = function(config) {
         // list of files / patterns to load in the browser
         files: [
             'components/jquery/dist/jquery.min.js',
+            'lib/midikeys.js',
             'lib/jquery.midikeys.js',
             'test/test.js'
         ],
