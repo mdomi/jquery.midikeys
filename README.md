@@ -17,9 +17,10 @@ Simple usage:
 <script src="jquery.midikeys.min.js"></script>
 <script>
   $(function () {
-    $(body).midiKeys();
-    $(body).on('message', function (event, message) {
-      // handle MIDI message
+    $(body).midiKeys({
+      onmidimessage : function (message) {
+        // handle MIDI message
+      }
     });
   });
 </script>
