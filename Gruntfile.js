@@ -66,22 +66,25 @@ module.exports = function (grunt) {
                 }
             }
         },
-        connect : {
-            server : {
-                options : {
-                    port : 8085,
-                    hostname : 'localhost'
-                }
-            }
-        },
         watch : {
             js : {
                 files : ['lib/jquery.midikeys.js'],
-                tasks : ['jshint:src', 'uglify', 'qunit']
+                tasks : ['jshint:src', 'uglify', 'karma:watch:run']
             },
             test : {
                 files : ['test/**/*.js', 'test/**/*.html'],
-                tasks : ['jshint:test', 'qunit']
+                tasks : ['jshint:test', 'karma:watch:run']
+            }
+        },
+        karma : {
+            options : {
+                configFile : 'test/karma.conf.js'
+            },
+            watch : {
+                background : true
+            },
+            continuous : {
+                singleRun : true
             }
         }
     });
@@ -91,10 +94,10 @@ module.exports = function (grunt) {
     grunt.registerTask('prepare-code', ['jshint', 'uglify']);
 
     // Test task
-    grunt.registerTask('test', ['bower:install', 'prepare-code', 'connect', 'qunit']);
+    grunt.registerTask('test', ['bower:install', 'prepare-code', 'karma:continuous']);
 
     // Dev task
-    grunt.registerTask('dev', ['bower:install', 'connect', 'watch']);
+    grunt.registerTask('dev', ['bower:install', 'karma:watch', 'watch']);
 
     // Default tasks(s)
     grunt.registerTask('default', ['test']);
