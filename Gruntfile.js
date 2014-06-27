@@ -6,14 +6,21 @@
 module.exports = function (grunt) {
     'use strict';
 
-    var testUrl = 'http://localhost:<%= connect.server.options.port %>/test/test.html?jquery=',
+    var testBaseUrl =
+            'http://<%= connect.server.options.hostname %>:<%= connect.server.options.port %>',
+        testPath = '/test/test.html?jquery=',
         banner = [
             '/**',
             ' * <%= pkg.name %> <%= pkg.version %>',
             ' * (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>',
             ' * <%= pkg.name %> is freely distributable under the MIT license.',
             ' */\n'
-        ].join('\n');
+        ].join('\n'),
+        jQueryVersions = ['2.1.1', '2.0.3', '1.10.2', '1.9.1', '1.8.3', '1.7.2'];
+
+    function createTestUrlForJQueryVersion(version) {
+        return testBaseUrl + testPath + version;
+    }
 
     // Project configuration.
     grunt.initConfig({
@@ -21,19 +28,19 @@ module.exports = function (grunt) {
         qunit : {
             all : {
                 options : {
-                    urls : ['1.9.1', '1.8.3', '1.7.2'].map(function (version) {
-                        return testUrl + version;
-                    })
+                    urls : jQueryVersions.map(createTestUrlForJQueryVersion)
                 }
             }
         },
         uglify : {
             options : {
-                banner : banner
+                banner : banner,
+                sourceMap : true
             },
             build : {
                 files : {
-                    'lib/jquery.midikeys.min.js' : ['lib/jquery.midikeys.js']
+                    'lib/midikeys.min.js' : ['lib/midikeys.js'],
+                    'lib/jquery.midikeys.min.js' : ['lib/midikeys.js', 'lib/jquery.midikeys.js']
                 }
             }
         },
@@ -41,9 +48,14 @@ module.exports = function (grunt) {
             options : {
                 jshintrc : '.jshintrc'
             },
-            all : [
-                'Gruntfile.js',
-                'lib/jquery.midikeys.js',
+            src : [
+                'lib/midikeys.js',
+                'lib/jquery.midikeys.js'
+            ],
+            grunt : [
+                'Gruntfile.js'
+            ],
+            test : [
                 'test/test.js',
                 'test/jquery-loader.js'
             ]
@@ -51,33 +63,45 @@ module.exports = function (grunt) {
         bower : {
             install : {
                 options : {
-                    targetDir : './components',
-                    cleanup : true
+                    targetDir : 'components',
+                    cleanTargetDir : true
                 }
             }
         },
-        connect : {
-            server : {
-                options : {
-                    port : 8085
-                }
+        watch : {
+            js : {
+                files : ['lib/midikeys.js', 'lib/jquery.midikeys.js'],
+                tasks : ['jshint:src', 'uglify', 'karma:watch:run']
+            },
+            test : {
+                files : ['test/**/*.js', 'test/**/*.html'],
+                tasks : ['jshint:test', 'karma:watch:run']
+            }
+        },
+        karma : {
+            options : {
+                configFile : 'test/karma.conf.js'
+            },
+            watch : {
+                background : true
+            },
+            continuous : {
+                singleRun : true
             }
         }
     });
 
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-qunit');
-    grunt.loadNpmTasks('grunt-bower-task');
-    grunt.loadNpmTasks('grunt-contrib-connect');
+    require('load-grunt-tasks')(grunt);
 
     grunt.registerTask('prepare-code', ['jshint', 'uglify']);
 
     // Test task
-    grunt.registerTask('test', ['bower:install', 'prepare-code', 'connect', 'qunit']);
+    grunt.registerTask('test', ['bower:install', 'prepare-code', 'karma:continuous']);
+
+    // Dev task
+    grunt.registerTask('dev', ['bower:install', 'karma:watch', 'watch']);
 
     // Default tasks(s)
     grunt.registerTask('default', ['test']);
-
 
 };

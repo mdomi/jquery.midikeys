@@ -1,7 +1,7 @@
 /* jshint regexp:false */
 (function (window) {
     'use strict';
-    var path = '../components/jquery/jquery.min.js',
+    var path = '../components/jquery/dist/jquery.min.js',
         jQueryVersion = window.location.search.match(/[?&]jquery=(.*?)(?=&|$)/);
 
     if (jQueryVersion) {

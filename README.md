@@ -6,8 +6,8 @@ With the large explosion of browser functionality in the realm of [audio](https:
 
 ## Quick Info
 
-* 1.66kB minified, 5.83kB full
-* Tested against jQuery 1.9.1, 1.8.3, 1.7.2
+* 1.92kB minified, 6.19kB full
+* Tested against jQuery 2.1.1, 2.0.3, 1.10.2, 1.9.1, 1.8.3, 1.7.2
 
 ## Usage
 
@@ -17,9 +17,10 @@ Simple usage:
 <script src="jquery.midikeys.min.js"></script>
 <script>
   $(function () {
-    $(body).midiKeys();
-    $(body).on('message', function (event, message) {
-      // handle MIDI message
+    $(body).midiKeys({
+      onmidimessage : function (message) {
+        // handle MIDI message
+      }
     });
   });
 </script>
