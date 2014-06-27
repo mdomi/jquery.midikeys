@@ -39,7 +39,8 @@ module.exports = function (grunt) {
             },
             build : {
                 files : {
-                    'lib/jquery.midikeys.min.js' : ['lib/jquery.midikeys.js']
+                    'lib/midikeys.min.js' : ['lib/midikeys.js'],
+                    'lib/jquery.midikeys.min.js' : ['lib/midikeys.js', 'lib/jquery.midikeys.js']
                 }
             }
         },
@@ -48,6 +49,7 @@ module.exports = function (grunt) {
                 jshintrc : '.jshintrc'
             },
             src : [
+                'lib/midikeys.js',
                 'lib/jquery.midikeys.js'
             ],
             grunt : [
@@ -68,7 +70,7 @@ module.exports = function (grunt) {
         },
         watch : {
             js : {
-                files : ['lib/jquery.midikeys.js'],
+                files : ['lib/midikeys.js', 'lib/jquery.midikeys.js'],
                 tasks : ['jshint:src', 'uglify', 'karma:watch:run']
             },
             test : {
