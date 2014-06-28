@@ -30,6 +30,10 @@
             el.dispatchEvent(createKeyEvent('Z'));
         });
 
+        it('ceases to fire events after being deregistered', function () {
+
+        });
+
     });
 
     describe('jquery.midiKeys', function () {
