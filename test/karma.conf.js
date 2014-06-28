@@ -19,7 +19,8 @@ module.exports = function(config) {
             'lib/midikeys.js',
             'lib/jquery.midikeys.js',
             // test specs
-            'test/midikeysSpec.js'
+            'test/midikeys.spec.js',
+            'test/jquery.midikeys.spec.js'
         ],
 
         exclude: [],
