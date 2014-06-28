@@ -13,13 +13,20 @@ module.exports = function(config) {
 
         // list of files / patterns to load in the browser
         files: [
+            // thurd party dependencies
             'components/jquery/dist/jquery.min.js',
+            // src files
             'lib/midikeys.js',
             'lib/jquery.midikeys.js',
-            'test/test.js'
+            // common test utilities
+            'test/test.js',
+            // test specs
+            'test/*.js'
         ],
 
-        exclude: [],
+        exclude: [
+            'lib/*.min.js'
+        ],
 
         preprocessors: {
             'lib/midikeys.js' : ['coverage'],
