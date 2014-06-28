@@ -16,14 +16,14 @@ module.exports = function(config) {
             // thurd party dependencies
             'components/jquery/dist/jquery.min.js',
             // src files
-            'lib/midikeys.js',
-            'lib/jquery.midikeys.js',
+            'lib/*.js',
             // test specs
-            'test/midikeys.spec.js',
-            'test/jquery.midikeys.spec.js'
+            'test/*.js'
         ],
 
-        exclude: [],
+        exclude: [
+            'lib/*.min.js'
+        ],
 
         preprocessors: {
             'lib/midikeys.js' : ['coverage'],

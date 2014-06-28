@@ -41,8 +41,7 @@ module.exports = function (grunt) {
                 'Gruntfile.js'
             ],
             test : [
-                'test/test.js',
-                'test/jquery-loader.js'
+                'test/*.js',
             ]
         },
         bower : {
