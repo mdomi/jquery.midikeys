@@ -16,7 +16,10 @@ module.exports = function(config) {
             // thurd party dependencies
             'components/jquery/dist/jquery.min.js',
             // src files
-            'lib/*.js',
+            'lib/midikeys.js',
+            'lib/jquery.midikeys.js',
+            // common test utilities
+            'test/test.js',
             // test specs
             'test/*.js'
         ],

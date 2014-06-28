@@ -1,20 +1,9 @@
-/* global describe: false, it: false, beforeEach: false, afterEach: false */
+/* global assert: false, describe: false, it: false, beforeEach: false, afterEach: false */
 (function (document, $) {
     'use strict';
 
-    function createKeyEvent(type, key) {
-        var event = document.createEvent('HTMLEvents');
-        event.initEvent(type, true, false);
-        event.keyCode = key.charCodeAt(0);
-        return event;
-    }
-
-    function triggerKeyEvent(el, type, key) {
-        el.dispatchEvent(createKeyEvent(type, key));
-    }
-
-    function triggerKeydown(el, key) {
-        triggerKeyEvent(el, 'keydown', key);
+    function fail() {
+        assert.fail('Should not occur');
     }
 
     describe('jquery.midiKeys', function () {
@@ -40,15 +29,41 @@
                 $el = $('<div></div>').midiKeys();
             });
 
-            it('translates keydown events into MIDI NOTE ON messages', function (done) {
-                $el.midiKeys('option', 'onmidimessage', function (message) {
-                    expect(message.data[0]).to.equal(0x90, 'Should be a MIDI NOTE ON event');
-                    expect(message.data[1]).to.equal(48, 'Should be a C3 note');
-                    expect(message.data[2]).to.equal(127, 'Should have default velocity');
-                    done();
-                });
+            function testKeydown(key, note, name) {
+                $el.midiKeys('option', 'onmidimessage', test.noteOnMessageVerifier(note, name));
+                test.triggerKeydown($el[0], key);
+            }
 
-                triggerKeydown($el[0], 'Z');
+            function testKeyup(key, note, name) {
+                $el.midiKeys('option', 'onmidimessage', test.noteOffMessageVerifier(note, name));
+                test.triggerKeyup($el[0], key);
+            }
+
+            function testKeydownWithNoEvent(key) {
+                $el.midiKeys('option', 'onmidimessage', fail);
+                test.triggerKeydown($el[0], key);
+            }
+
+            it('translates keydown events into MIDI NOTE ON messages', function () {
+                test.getNoteData().map(function (args) {
+                    testKeydown.apply(this, args);
+                });
+            });
+
+            it('translates keyup events into MIDI NOTE OFF messages', function () {
+                test.getNoteData().map(function (args) {
+                    testKeyup.apply(this, args);
+                });
+            });
+
+            it('does not execute a callback for a non-registered key', function () {
+                testKeydownWithNoEvent('1');
+                testKeydownWithNoEvent('A');
+            });
+
+            it('does not execute a callback for a duplicated event', function () {
+                testKeydown('G', 54, 'F#3');
+                testKeydownWithNoEvent('G');
             });
 
             afterEach(function () {
