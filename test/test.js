@@ -2,11 +2,19 @@
 (function (document, $, MIDIKeys) {
     'use strict';
 
-    function createKeyEvent(c) {
+    function createKeyEvent(type, key) {
         var event = document.createEvent('HTMLEvents');
-        event.initEvent('keydown', true, false);
-        event.keyCode = c.charCodeAt(0);
+        event.initEvent(type, true, false);
+        event.keyCode = key.charCodeAt(0);
         return event;
+    }
+
+    function triggerKeyEvent(el, type, key) {
+        el.dispatchEvent(createKeyEvent(type, key));
+    }
+
+    function triggerKeydown(el, key) {
+        triggerKeyEvent(el, 'keydown', key);
     }
 
     describe('MIDIKeys', function () {
@@ -27,11 +35,7 @@
                 done();
             });
 
-            el.dispatchEvent(createKeyEvent('Z'));
-        });
-
-        it('ceases to fire events after being deregistered', function () {
-
+            triggerKeydown(el, 'Z');
         });
 
     });
@@ -67,7 +71,7 @@
                     done();
                 });
 
-                $el[0].dispatchEvent(createKeyEvent('Z'));
+                triggerKeydown($el[0], 'Z');
             });
 
             afterEach(function () {
