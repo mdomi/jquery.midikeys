@@ -19,22 +19,23 @@
 
     describe('MIDIKeys', function () {
 
-        var el;
+        var el, plugin;
+
+        function messageVerifier(note, name) {
+            return function (message) {
+                expect(message.data[0]).to.equal(0x90, 'Should be a MIDI NOTE ON event');
+                expect(message.data[1]).to.equal(note, 'Should be a ' + name + ' note');
+                expect(message.data[2]).to.equal(127, 'Should have default velocity');
+            };
+        }
 
         beforeEach(function () {
             el = document.createElement('div');
+            plugin = new MIDIKeys(el);
         });
 
-        it('translates keydown events into MIDI NOTE ON messages', function (done) {
-            var plugin = new MIDIKeys(el);
-
-            plugin.option('onmidimessage', function (message) {
-                expect(message.data[0]).to.equal(0x90, 'Should be a MIDI NOTE ON event');
-                expect(message.data[1]).to.equal(48, 'Should be a C3 note');
-                expect(message.data[2]).to.equal(127, 'Should have default velocity');
-                done();
-            });
-
+        it('translates keydown events into MIDI NOTE ON messages', function () {
+            plugin.option('onmidimessage', messageVerifier(48, 'C3'));
             triggerKeydown(el, 'Z');
         });
 
