@@ -11,12 +11,12 @@
         }
 
         function testKeydown(key, note, name) {
-            plugin.option('onmidimessage', test.noteOnMessageVerifier(note, name));
+            plugin.option('onmidimessage', test.noteOnMessageVerifier(el, note, name));
             test.triggerKeydown(el, key);
         }
 
         function testKeyup(key, note, name) {
-            plugin.option('onmidimessage', test.noteOffMessageVerifier(note, name));
+            plugin.option('onmidimessage', test.noteOffMessageVerifier(el, note, name));
             test.triggerKeyup(el, key);
         }
 

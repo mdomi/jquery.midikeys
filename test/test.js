@@ -49,16 +49,18 @@
         triggerKeyEvent(el, 'keyup', key);
     }
 
-    function noteOnMessageVerifier(note, name) {
+    function noteOnMessageVerifier(el, note, name) {
         return function (message) {
+            expect(this).to.equal(el, '"this" should be the DOM element');
             expect(message.data[0]).to.equal(0x90, 'Should be a MIDI NOTE ON event');
             expect(message.data[1]).to.equal(note, 'Should be a ' + name + ' note');
             expect(message.data[2]).to.equal(127, 'Should have default NOTE ON velocity');
         };
     }
 
-    function noteOffMessageVerifier(note, name) {
+    function noteOffMessageVerifier(el, note, name) {
         return function (message) {
+            expect(this).to.equal(el, '"this" should be the DOM element');
             expect(message.data[0]).to.equal(0x80, 'Should be a MIDI NOTE OFF event');
             expect(message.data[1]).to.equal(note, 'Should be a ' + name + ' note');
             expect(message.data[2]).to.equal(64, 'Should have default NOTE OFF velocity');

@@ -30,12 +30,14 @@
             });
 
             function testKeydown(key, note, name) {
-                $el.midiKeys('option', 'onmidimessage', test.noteOnMessageVerifier(note, name));
+                $el.midiKeys('option', 'onmidimessage',
+                    test.noteOnMessageVerifier($el[0], note, name));
                 test.triggerKeydown($el[0], key);
             }
 
             function testKeyup(key, note, name) {
-                $el.midiKeys('option', 'onmidimessage', test.noteOffMessageVerifier(note, name));
+                $el.midiKeys('option', 'onmidimessage',
+                    test.noteOffMessageVerifier($el[0], note, name));
                 test.triggerKeyup($el[0], key);
             }
 
