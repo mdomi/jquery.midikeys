@@ -11,7 +11,7 @@ module.exports = function (grunt) {
             ' * <%= pkg.name %> <%= pkg.version %>',
             ' * (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>',
             ' * <%= pkg.name %> is freely distributable under the MIT license.',
-            ' */\n'
+            ' */'
         ].join('\n');
 
     // Project configuration.

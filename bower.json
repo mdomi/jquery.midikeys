@@ -1,6 +1,6 @@
 {
-  "name": "keys",
-  "version": "0.1.0",
+  "name": "MIDIKeys",
+  "version": "1.0.0",
   "dependencies": {
     "jquery": "~2.1.1"
   }
