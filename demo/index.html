@@ -17,29 +17,6 @@
         </div>
         <script src="../components/jquery/dist/jquery.min.js"></script>
         <script src="../lib/jquery.midikeys.min.js"></script>
-        <script>
-            (function ($) {
-                $(function () {
-                    var $log = $('#log');
-                    $(document.body).midiKeys({
-                        channel : 4,
-                        noteOffVelocity : 0x7f,
-                        noteOnVelocity : function (timestamp) {
-                            return timestamp % 0x7f;
-                        },
-                        onmidimessage : function (event) {
-                            var message = 'MIDI message received at timestamp ' + event.timestamp + ' [' + event.data.length + ' bytes]: ';
-                            message += Array.prototype.map.call(event.data, function (data) {
-                                return '0x' + data.toString(16);
-                            }).join(' ');
-                            $('<p></p>').text(message).appendTo($log);
-                            if ($log.find('p').length > 20) {
-                                $log.find('p:first').remove();
-                            }
-                        }
-                    });
-                });
-            }(jQuery));
-        </script>
+        <script src="demo.js"></script>
     </body>
 </html>
