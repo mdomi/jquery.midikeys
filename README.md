@@ -9,9 +9,9 @@ The library maps Z-M to the notes C3-B4, and Q-U to the notes C4-B5 by default. 
 ## Quick Info
 
 * Library
-    * 1.46kB minified, 4.74kB full
+    * 1.42 kB minified, 4.75 kB full
 * Library + jQuery plugin
-    * 1.98kB minified, 6.15kb full
+    * 1.94 kB minified, 6.16 kB full
 
 ## Usage
 
