@@ -9,32 +9,31 @@ module.exports = function(config) {
         basePath: '..',
 
         // frameworks to use
-        // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
         frameworks: ['mocha', 'chai'],
 
         // list of files / patterns to load in the browser
         files: [
+            // thurd party dependencies
             'components/jquery/dist/jquery.min.js',
+            // src files
             'lib/midikeys.js',
             'lib/jquery.midikeys.js',
-            'test/test.js'
+            // common test utilities
+            'test/test.js',
+            // test specs
+            'test/*.js'
         ],
 
-        // list of files to exclude
         exclude: [
-
+            'lib/*.min.js'
         ],
 
-        // preprocess matching files before serving them to the browser
-        // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-
+            'lib/midikeys.js' : ['coverage'],
+            'lib/jquery.midikeys.js' : ['coverage']
         },
 
-        // test results reporter to use
-        // possible values: 'dots', 'progress'
-        // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['progress'],
+        reporters: ['progress', 'coverage'],
 
         // web server port
         port: 9876,
@@ -46,13 +45,17 @@ module.exports = function(config) {
         logLevel: config.LOG_INFO,
 
         // start these browsers
-        // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
         browsers: ['PhantomJS'],
 
         client: {
             mocha: {
                 ui: 'tdd'
             }
+        },
+
+        coverageReporter : {
+            type : 'html',
+            dir : 'coverage/'
         }
     });
 };
