@@ -11,27 +11,12 @@
         <meta name="viewport" content="width=device-width">
     </head>
     <body>
-        <h1>Keys Plugin Demo</h1>
+        <h1>Keys Plugin Demo - Synth Control</h1>
         <p>
         <div id="log">
         </div>
         <script src="../components/jquery/dist/jquery.min.js"></script>
         <script src="../lib/jquery.midikeys.min.js"></script>
-        <script>
-            (function ($) {
-                $(function () {
-                    var $log = $('#log');
-                    $(document.body).midiKeys({
-                        channel : 4,
-                        noteOffVelocity : 0x7f,
-                        noteOnVelocity : function (timestamp) {
-                            return timestamp % 0x7f;
-                        }
-                    }).on('message', function (event, midiEvent) {
-                        $('<p></p>').text(JSON.stringify(midiEvent)).appendTo($log);
-                    });
-                });
-            }(jQuery));
-        </script>
+        <script src="synth.js"></script>
     </body>
 </html>

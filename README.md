@@ -42,7 +42,7 @@ As a jQuery plugin:
 </script>
 ```
 
-The message passed to event handlers implements the IDL for the [Web MIDI API MIDIEvent interface](http://www.w3.org/TR/webmidi/#midievent-interface).
+The message passed to event handlers implements the IDL for the [Web MIDI API MIDIMessageEvent interface](http://www.w3.org/TR/webmidi/#midimessageevent-interface).
 
 ## Options
 
