@@ -38,8 +38,9 @@
         return joinBytes(event.data);
     }
 
-    $(function () {
-        var $log = $('#log'),
+    document.addEventListener('DOMContentLoaded', function () {
+        var messages = [],
+            log = document.getElementById('log'),
             plugin = new MIDIKeys(document.body, {
                 channel : 7,
                 noteOffVelocity : 0x7f,
@@ -50,11 +51,15 @@
         plugin.option('onmidimessage', function (event) {
             var message = 'MIDI message received at timestamp ' + event.timestamp +
                 ' [' + event.data.length + ' bytes]: ' + messageToString(event);
-            $('<p></p>').text(message).appendTo($log);
-            if ($log.find('p').length > 20) {
-                $log.find('p:first').remove();
+            messages.push(message);
+            if (messages.length > 20) {
+                messages.shift();
             }
+            while (log.firstChild) {
+                log.removeChild(log.firstChild);
+            }
+            log.appendChild(document.createTextNode(messages.join('\n')));
         });
-    });
+    }, true);
 
 }(this, this.document, this.jQuery, this.MIDIKeys));
