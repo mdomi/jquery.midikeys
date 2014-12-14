@@ -9,6 +9,16 @@
     <body>
         <div class="container">
             <h1>MIDIKeys</h1>
+            <pre>
+var plugin = new MIDIKeys(document.body, {
+    channel : 7,
+    noteOffVelocity : 0x7f,
+    noteOnVelocity : function (timestamp) {
+        return timestamp % 0x7f;
+    }
+});
+            </pre>
+            <p>Type keys to see notes!</p>
             <pre id="log"></pre>
         </div>
         <script src="lib/midikeys.min.js"></script>
