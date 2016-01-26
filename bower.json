@@ -1,7 +1,21 @@
 {
   "name": "MIDIKeys",
   "version": "1.1.0",
+  "author": "Mike Dominice <mike@mikedominice.com>",
+  "description": "Library/jQuery plugin mapping keyboard events to MIDI events",
+  "ignore": [
+    "demo/",
+    "test/",
+    ".bowerrc",
+    ".editorconfig",
+    ".gitignore",
+    ".jshintrc",
+    ".travis.yml",
+    "Gruntfile.js",
+    "package.json",
+    "README.md"
+  ],
   "dependencies": {
-    "jquery": "~2.1.1"
+    "jquery": ">=2.1.1"
   }
 }
